@@ -3,6 +3,9 @@
 build.xml
 manifest.mf
 
+# Don't ask.
+src/Mergesort.java
+
 # Folders
 build/
 nbproject/
