@@ -10,6 +10,15 @@ public class Area {
     private int mapWidth;
     private int mapHeight;
     
+    public int getWidth() { return mapWidth; }
+    public int getHeight() { return mapHeight; }
+    
+    public Tile getTile(int x, int y) {
+        if (x<0 || x>mapWidth-1 || y<0 || y>mapHeight-1)
+            return Tile.OUT_OF_BOUNDS;
+        return map[x][y];
+    }
+    
     public Area(int width, int height, byte type) {
         this.mapWidth = width;
         this.mapHeight = height;
@@ -33,11 +42,19 @@ public class Area {
     }
     
     private void generateThroneRoom() {
-        
+        for (int i=0;i<mapWidth;i++) {
+            for (int j=0;j<mapHeight;j++) {
+                map[i][j] = Math.random()<0.5 ? Tile.STONE_FLOOR : Tile.STONE_WALL;
+            }
+        }
     }
     
     private void generateDungeon() {
-        
+        for (int i=0;i<mapWidth;i++) {
+            for (int j=0;j<mapHeight;j++) {
+                map[i][j] = Math.random()<0.5 ? Tile.STONE_FLOOR : Tile.STONE_WALL;
+            }
+        }
     }
     
     private void generateCaves() {
@@ -69,13 +86,6 @@ public class Area {
                 }
             }
             map = newMap;
-        }
-        
-        for (int i=0;i<mapHeight;i++) {
-            for (int j=0;j<mapWidth;j++) {
-                System.out.print(map[j][i].glyph);
-            }
-            System.out.println();
         }
     }
 }

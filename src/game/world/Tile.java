@@ -5,6 +5,7 @@ import java.awt.Color;
 
 public enum Tile {
     
+    OUT_OF_BOUNDS('X',AsciiPanel.brightWhite,false,false),
     STONE_WALL('#',AsciiPanel.yellow,false,false),
     STONE_FLOOR('.',AsciiPanel.yellow,true,true);
     

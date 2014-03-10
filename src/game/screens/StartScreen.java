@@ -10,9 +10,11 @@ public class StartScreen implements Screen {
     }
     
     public Screen respondToUserInput(KeyEvent key) {
-        char k = key.getKeyChar();
+        int k = key.getKeyCode();
+        
         if (k == KeyEvent.VK_ENTER)
             return new PlayScreen();
+        
         return this;
     }
 }
