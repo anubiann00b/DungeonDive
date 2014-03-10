@@ -10,12 +10,15 @@ import javax.swing.JFrame;
 
 public class Window extends JFrame implements KeyListener {
     
+    public static final int WINDOW_WIDTH = 80;
+    public static final int WINDOW_HEIGHT = 24;
+    
     private AsciiPanel terminal;
     private Screen screen;
     
     public Window() {
         super();
-        terminal = new AsciiPanel(80,24);
+        terminal = new AsciiPanel(WINDOW_WIDTH,WINDOW_HEIGHT);
         add(terminal);
         pack();
         screen = new StartScreen();
