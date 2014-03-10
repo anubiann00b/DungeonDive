@@ -8,20 +8,15 @@ public enum Tile {
     STONE_WALL('#',AsciiPanel.yellow,false,false),
     STONE_FLOOR('.',AsciiPanel.yellow,true,true);
     
-    private char glyph;
-    private Color color;
-    private boolean passable;
-    private boolean transparent;
+    public char glyph;
+    public Color color;
+    public boolean isPassable;
+    public boolean isTransparent;
     
-    public char getGlyph() { return glyph; }
-    public Color getColor() { return color; }
-    public boolean isPassable() { return passable; }
-    public boolean isTransparent() { return transparent; }
-    
-    Tile(char glyph, Color color, boolean passable, boolean transparent) {
+    Tile(char glyph, Color color, boolean isPassable, boolean isTransparent) {
         this.glyph = glyph;
         this.color = color;
-        this.passable = passable;
-        this.transparent = transparent;
+        this.isPassable = isPassable;
+        this.isTransparent = isTransparent;
     }
 }

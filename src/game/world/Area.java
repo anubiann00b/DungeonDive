@@ -73,7 +73,7 @@ public class Area {
         
         for (int i=0;i<mapHeight;i++) {
             for (int j=0;j<mapWidth;j++) {
-                System.out.print(map[j][i].getGlyph());
+                System.out.print(map[j][i].glyph);
             }
             System.out.println();
         }
