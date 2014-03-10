@@ -14,6 +14,7 @@ public enum Tile {
     private boolean transparent;
     
     public char getGlyph() { return glyph; }
+    public Color getColor() { return color; }
     public boolean isPassable() { return passable; }
     public boolean isTransparent() { return transparent; }
     
