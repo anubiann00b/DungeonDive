@@ -2,10 +2,12 @@ package game.screens;
 
 import asciiPanel.AsciiPanel;
 import game.util.MathHelper;
+import game.util.Message;
 import game.world.Area;
 import game.world.Tile;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.util.Stack;
 
 public class PlayScreen implements Screen {
     
@@ -15,14 +17,19 @@ public class PlayScreen implements Screen {
     public static final int MAP_WINDOW_Y = 16;
     public static final int MAP_WIDTH = 180;
     public static final int MAP_HEIGHT = 124;
+    public static final int MESSAGE_WINDOW_POS = 17;
+    public static final int MESSAGE_WINDOW_SIZE = 7;
     
     private Area area;
     
     private int x;
     private int y;
     
+    private Stack<Message> messages;
+    
     public PlayScreen() {
         init();
+        messages = new Stack<Message>();
     }
     
     private void init() {
@@ -36,6 +43,16 @@ public class PlayScreen implements Screen {
     
     public void displayOutput(AsciiPanel terminal) {
         drawMap(terminal);
+        drawMessages(terminal);
+    }
+    
+    private void drawMessages(AsciiPanel terminal) {
+        for (int i=0;i<MESSAGE_WINDOW_SIZE;i++) {
+            if(messages.empty())
+                return;
+            Message message = messages.pop();
+            terminal.write(message.message,1,MESSAGE_WINDOW_POS+i,message.color);
+        }
     }
     
     private void drawMap(AsciiPanel terminal) {
@@ -56,11 +73,29 @@ public class PlayScreen implements Screen {
             y += dy;
             return;
         }
-        addMessage("You can't move there!");
+        String message;
+        switch ((int)(Math.random()*5)) {
+            case 0:
+                message = "Good luck trying to walk through walls.";
+                break;
+            case 1:
+                message = "You can't move there.";
+                break;
+            case 2:
+                message = "You crash into a stone wall.";
+                break;
+            case 3:
+                message = "Ow.";
+                break;
+            default:
+                message = "The wall mutters some questionable adjectives.";
+                break;
+        }
+        addMessage(new Message(message,Color.ORANGE));
     }
     
-    private void addMessage(String message) {
-        System.out.println(message);
+    private void addMessage(Message message) {
+        messages.push(message);
     }
     
     public Screen respondToUserInput(KeyEvent key) {
