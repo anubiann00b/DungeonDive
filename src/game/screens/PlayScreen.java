@@ -38,7 +38,6 @@ public class PlayScreen implements Screen {
             x = (int)(Math.random()*MAP_WIDTH);
             y = (int)(Math.random()*MAP_HEIGHT);
         } while (!area.getTile(x,y).isPassable);
-        System.out.println(x + " " + y);
     }
     
     public void displayOutput(AsciiPanel terminal) {
@@ -101,21 +100,21 @@ public class PlayScreen implements Screen {
     public Screen respondToUserInput(KeyEvent key) {
         int k = key.getKeyCode();
         
-        if (k == KeyEvent.VK_RIGHT || k == KeyEvent.VK_L)
+        if (k == KeyEvent.VK_RIGHT || k == KeyEvent.VK_L || k == KeyEvent.VK_NUMPAD6)
             moveBy(1,0);
-        else if (k == KeyEvent.VK_DOWN || k == KeyEvent.VK_J)
+        else if (k == KeyEvent.VK_DOWN || k == KeyEvent.VK_J || k == KeyEvent.VK_NUMPAD2)
             moveBy(0,1);
-        else if (k == KeyEvent.VK_LEFT || k == KeyEvent.VK_H)
+        else if (k == KeyEvent.VK_LEFT || k == KeyEvent.VK_H || k == KeyEvent.VK_NUMPAD4)
             moveBy(-1,0);
-        else if (k == KeyEvent.VK_UP || k == KeyEvent.VK_K)
+        else if (k == KeyEvent.VK_UP || k == KeyEvent.VK_K || k == KeyEvent.VK_NUMPAD8)
             moveBy(0,-1);
-        else if (k == KeyEvent.VK_Y)
+        else if (k == KeyEvent.VK_Y || k == KeyEvent.VK_NUMPAD7)
             moveBy(-1,-1);
-        else if (k == KeyEvent.VK_U)
+        else if (k == KeyEvent.VK_U || k == KeyEvent.VK_NUMPAD9)
             moveBy(1,-1);
-        else if (k == KeyEvent.VK_B)
+        else if (k == KeyEvent.VK_B || k == KeyEvent.VK_NUMPAD1)
             moveBy(-1,1);
-        else if (k == KeyEvent.VK_N)
+        else if (k == KeyEvent.VK_N || k == KeyEvent.VK_NUMPAD3)
             moveBy(1,1);
         
         return this;
