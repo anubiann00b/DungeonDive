@@ -15,7 +15,7 @@ public class PlayScreen implements Screen {
     
     public static final int MAP_OFFSET_X = 1;
     public static final int MAP_OFFSET_Y = 1;
-    public static final int MAP_WINDOW_X = 50;
+    public static final int MAP_WINDOW_X = 40;
     public static final int MAP_WINDOW_Y = 16;
     public static final int MAP_WIDTH = 180;
     public static final int MAP_HEIGHT = 124;
@@ -62,7 +62,7 @@ public class PlayScreen implements Screen {
         messages = new Stack<Message>();
         fov = new FieldOfView(world);
         
-        for (int i=0;i<500;i++) {
+        for (int i=0;i<50;i++) {
             world.addEnemy();
         }
     }
@@ -70,6 +70,11 @@ public class PlayScreen implements Screen {
     public void displayOutput(AsciiPanel terminal) {
         drawMap(terminal);
         drawMessages(terminal);
+        drawInfo(terminal);
+    }
+    
+    private void drawInfo(AsciiPanel terminal) {
+        terminal.write("Dungeon Dive",MAP_OFFSET_X+MAP_WINDOW_X,MAP_OFFSET_Y);
     }
     
     private void drawMessages(AsciiPanel terminal) {
@@ -167,8 +172,8 @@ public class PlayScreen implements Screen {
             moveBy(-1,1);
         else if (k == KeyEvent.VK_N || k == KeyEvent.VK_NUMPAD3)
             moveBy(1,1);
-        else if (k == KeyEvent.VK_PERIOD || k == KeyEvent.VK_S) {}
-            
+        else if (k == KeyEvent.VK_PERIOD || k == KeyEvent.VK_S)
+            addMessage(new Message("You wait.",AsciiPanel.white));
         else
             updated = false;
         
