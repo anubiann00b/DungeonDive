@@ -1,7 +1,7 @@
 DungeonDive
 ===========
 
-A coffee break roguelike for this year's 7DRL.
+A coffee break roguelike for this year's (2014) 7DRL.
 
 
 \*clears throat\*
