@@ -25,15 +25,15 @@ public class EnemyOrcFighter extends Enemy {
         int cdx = 0;
         int cdy = 0;
         
-        double currentWorth = 100;
+        double currentWorth = 10000;
         
         for (int ox=-1;ox<=1;ox++) {
             for (int oy=-1;oy<=1;oy++) {
                 if (ox==0 && oy==0)
                     continue;
-                if (!world.getTile(x-ox,y-oy).isPassable || world.getEnemy(x+ox,y+oy)!=null)
+                if (!world.getTile(x+ox,y+oy).isPassable || world.getEnemy(x+ox,y+oy)!=null)
                     continue;
-                double worth = (px-x-ox)*(px-x-ox) + (py-y-oy)*(py-y-oy);
+                double worth = (x+ox-px)*(x-px+ox) + (y+oy-py)*(y+oy-py);
                 if (worth < currentWorth) {
                     currentWorth = worth;
                     cdx = ox;
@@ -49,9 +49,6 @@ public class EnemyOrcFighter extends Enemy {
             attack();
             return;
         }
-        
-        if (world.getEnemy(x+dx,y+dy)!=null)
-            System.out.println("NO BIATCH");
         
         x += dx;
         y += dy;

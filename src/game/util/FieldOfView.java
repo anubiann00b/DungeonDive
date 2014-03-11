@@ -40,15 +40,15 @@ public class FieldOfView {
             for (int j=-r;j<=r;j++) {
                 if (i*i+j*j>=r*r)
                     continue;
-          
+                
                 if (x+i< 0 || x+i>=world.getWidth() || y+j<0 || y+j >= world.getHeight())
                     continue;
-          
+                
                 for (Point p : new Line(x,y,x+i,y+j)) {
                     Tile tile = world.getTile(p.getX(),p.getY());
                     visible[p.getX()][p.getY()] = true;
                     tiles[p.getX()][p.getY()] = tile;
-              
+                    
                     if (!tile.isTransparent)
                         break;
                 }

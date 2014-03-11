@@ -73,19 +73,13 @@ public class PlayScreen implements Screen {
     
     private void drawMap(AsciiPanel terminal) {
         fov.update(px,py,9);
+        
+        int camX = MathHelper.median(0,px-MAP_WINDOW_X/2,MAP_WIDTH-MAP_WINDOW_X);
+        int camY = MathHelper.median(0,py-MAP_WINDOW_Y/2,MAP_HEIGHT-MAP_WINDOW_Y);
+        
         for(int i=0;i<MAP_WINDOW_X;i++) {
             for (int j=0;j<MAP_WINDOW_Y;j++) {
-                int camX = MathHelper.median(0,px-MAP_WINDOW_X/2,MAP_WIDTH-MAP_WINDOW_X);
-                int camY = MathHelper.median(0,py-MAP_WINDOW_Y/2,MAP_HEIGHT-MAP_WINDOW_Y);
-                
-                terminal.write('@',px-camX+MAP_OFFSET_X,py-camY+MAP_OFFSET_Y,Color.WHITE);
-                
                 Tile tile = world.getTile(i+camX,j+camY);
-                
-                for (Enemy e : world.getEnemies()) {
-                    if (fov.isVisible(e.getX(),e.getY()))
-                        terminal.write(e.getGlyph(),e.getX()-camX+MAP_OFFSET_X,e.getY()-camY+MAP_OFFSET_Y,e.getColor());
-                }
                 
                 if (fov.isVisible(i+camX,j+camY))
                     terminal.write(tile.glyph,i+MAP_OFFSET_X,j+MAP_OFFSET_Y,tile.color);
@@ -95,6 +89,12 @@ public class PlayScreen implements Screen {
                 }
             }
         }
+        
+        for (Enemy e : world.getEnemies()) {
+            if (fov.isVisible(e.getX(),e.getY()))
+                terminal.write(e.getGlyph(),e.getX()-camX+MAP_OFFSET_X,e.getY()-camY+MAP_OFFSET_Y,e.getColor());
+        }
+        terminal.write('@',px-camX+MAP_OFFSET_X,py-camY+MAP_OFFSET_Y,Color.WHITE);
     }
     
     private void moveBy(int dx, int dy) {
