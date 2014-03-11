@@ -8,6 +8,8 @@ A coffee break roguelike for this year's 7DRL.
 
 A simple classic ascii (cp437) coffeebreak roguelike. There are three stages, a dungeon/cellar stage, a cave stage, and a throne/treasure room stage.
 
+I originally planned to copy paste no code, but now I've decided to copy paste a minimum of code (things like FOV, which are really repetitive and don't take much thought). I rewrote the cave generation before deciding to borrow unimportant stuff, and it turned out to be a mirror image of my other projects, so I gave up on that.
+
 Thanks to:
 
 * Trystan for an awesome library and set of tutorials.
