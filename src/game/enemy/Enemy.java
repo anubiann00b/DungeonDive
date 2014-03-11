@@ -1,18 +1,20 @@
 package game.enemy;
 
+import game.screens.PlayScreen;
 import game.world.World;
 import java.awt.Color;
 
 public class Enemy {
     
-    private int x;
-    private int y;
-    private int maxHp;
-    private int currentHp;
-    private char glyph;
-    private String name;
-    private Color color;
-    private World world;
+    protected int x;
+    protected int y;
+    protected int maxHp;
+    protected int currentHp;
+    protected char glyph;
+    protected String name;
+    protected Color color;
+    protected World world;
+    protected PlayScreen screen;
     
     public int getX() { return x; }
     public int getY() { return y; }
@@ -22,7 +24,7 @@ public class Enemy {
     public String getName() { return name; }
     public Color getColor() { return color; }
     
-    public Enemy(int x, int y, int hp, char glyph, String name, Color color, World world, int visionRadius) {
+    public Enemy(int x, int y, int hp, char glyph, String name, Color color, PlayScreen screen) {
         this.x = x;
         this.y = y;
         this.maxHp = hp;
@@ -30,6 +32,11 @@ public class Enemy {
         this.glyph = glyph;
         this.name = name;
         this.color = color;
-        this.world = world;
+        this.screen = screen;
+        this.world = screen.getWorld();
+    }
+    
+    public void update() {
+        
     }
 }

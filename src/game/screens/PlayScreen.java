@@ -1,6 +1,7 @@
 package game.screens;
 
 import asciiPanel.AsciiPanel;
+import game.enemy.Enemy;
 import game.util.FieldOfView;
 import game.util.MathHelper;
 import game.util.Message;
@@ -27,20 +28,33 @@ public class PlayScreen implements Screen {
     
     private FieldOfView fov;
     
-    private int x;
-    private int y;
+    private int px;
+    private int py;
     
     private Stack<Message> messages;
     
+    public int getPlayerX() { return px; }
+    public int getPlayerY() { return py; }
+    
+    public World getWorld() { return world; }
+    
+    public void addMessage(Message message) {
+        messages.push(message);
+    }
+    
     public PlayScreen() {
         level++;
-        world = new World(MAP_WIDTH,MAP_HEIGHT,level);
+        world = new World(MAP_WIDTH,MAP_HEIGHT,level,this);
         do {
-            x = (int)(Math.random()*MAP_WIDTH);
-            y = (int)(Math.random()*MAP_HEIGHT);
-        } while (!world.getTile(x,y).isPassable);
+            px = (int)(Math.random()*MAP_WIDTH);
+            py = (int)(Math.random()*MAP_HEIGHT);
+        } while (!world.getTile(px,py).isPassable);
         messages = new Stack<Message>();
         fov = new FieldOfView(world);
+        
+        for (int i=0;i<5000;i++) {
+            world.addEnemy();
+        }
     }
     
     public void displayOutput(AsciiPanel terminal) {
@@ -58,15 +72,20 @@ public class PlayScreen implements Screen {
     }
     
     private void drawMap(AsciiPanel terminal) {
-        fov.update(x,y,9);
+        fov.update(px,py,9);
         for(int i=0;i<MAP_WINDOW_X;i++) {
             for (int j=0;j<MAP_WINDOW_Y;j++) {
-                int camX = MathHelper.median(0,x-MAP_WINDOW_X/2,MAP_WIDTH-MAP_WINDOW_X);
-                int camY = MathHelper.median(0,y-MAP_WINDOW_Y/2,MAP_HEIGHT-MAP_WINDOW_Y);
+                int camX = MathHelper.median(0,px-MAP_WINDOW_X/2,MAP_WIDTH-MAP_WINDOW_X);
+                int camY = MathHelper.median(0,py-MAP_WINDOW_Y/2,MAP_HEIGHT-MAP_WINDOW_Y);
                 
-                terminal.write('@',x-camX+MAP_OFFSET_X,y-camY+MAP_OFFSET_Y,Color.WHITE);
+                terminal.write('@',px-camX+MAP_OFFSET_X,py-camY+MAP_OFFSET_Y,Color.WHITE);
                 
                 Tile tile = world.getTile(i+camX,j+camY);
+                
+                for (Enemy e : world.getEnemies()) {
+                    if (fov.isVisible(e.getX(),e.getY()))
+                        terminal.write(e.getGlyph(),e.getX()-camX+MAP_OFFSET_X,e.getY()-camY+MAP_OFFSET_Y,e.getColor());
+                }
                 
                 if (fov.isVisible(i+camX,j+camY))
                     terminal.write(tile.glyph,i+MAP_OFFSET_X,j+MAP_OFFSET_Y,tile.color);
@@ -79,9 +98,9 @@ public class PlayScreen implements Screen {
     }
     
     private void moveBy(int dx, int dy) {
-        if (world.getTile(x+dx,y+dy).isPassable) {
-            x += dx;
-            y += dy;
+        if (world.getTile(px+dx,py+dy).isPassable) {
+            px += dx;
+            py += dy;
             return;
         }
         String message;
@@ -103,10 +122,6 @@ public class PlayScreen implements Screen {
                 break;
         }
         addMessage(new Message(message,Color.ORANGE));
-    }
-    
-    private void addMessage(Message message) {
-        messages.push(message);
     }
     
     public Screen respondToUserInput(KeyEvent key) {
@@ -131,6 +146,9 @@ public class PlayScreen implements Screen {
             moveBy(1,1);
         else
             updated = false;
+        
+        if (updated)
+            world.update();
         
         return this;
     }
