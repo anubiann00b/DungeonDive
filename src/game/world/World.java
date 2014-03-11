@@ -64,7 +64,7 @@ public class World {
 
     public Enemy getEnemy(int x, int y) {
         for (Enemy e : enemies)
-            if (e.getX() == x && e.getY() == y)
+            if (e.getX()==x && e.getY()==y)
                 return e;
         return null;
     }

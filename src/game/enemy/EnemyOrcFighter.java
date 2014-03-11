@@ -13,24 +13,48 @@ public class EnemyOrcFighter extends Enemy {
     
     @Override
     public void update() {
-        int px = screen.getPlayerX();
-        int py = screen.getPlayerY();
         
-        moveBy((int)(Math.random()*3)-1,(int)(Math.random()*3)-1);
+        fov.update(x,y,9);
+        
+        int px = screen.getPX();
+        int py = screen.getPY();
+        
+        if (!fov.isVisible(px,py))
+            return;
+        
+        int cdx = 0;
+        int cdy = 0;
+        
+        double currentWorth = 100;
+        
+        for (int ox=-1;ox<=1;ox++) {
+            for (int oy=-1;oy<=1;oy++) {
+                if (ox==0 && oy==0)
+                    continue;
+                if (!world.getTile(x-ox,y-oy).isPassable || world.getEnemy(x+ox,y+oy)!=null)
+                    continue;
+                double worth = (px-x-ox)*(px-x-ox) + (py-y-oy)*(py-y-oy);
+                if (worth < currentWorth) {
+                    currentWorth = worth;
+                    cdx = ox;
+                    cdy = oy;
+                }
+            }
+        }
+        moveBy(cdx,cdy);
     }
     
     private void moveBy(int dx, int dy) {
-        if (x+dx==screen.getPlayerX() && y+dy==screen.getPlayerY()) {
+        if (x+dx==screen.getPX() && y+dy==screen.getPY()) {
             attack();
             return;
         }
         
-        Enemy e = world.getEnemy(x+dx,y+dy);
+        if (world.getEnemy(x+dx,y+dy)!=null)
+            System.out.println("NO BIATCH");
         
-        if (e==null && world.getTile(x+dx,y+dy).isPassable) {
-            x += dx;
-            y += dy;
-        }
+        x += dx;
+        y += dy;
     }
     
     public void attack() {

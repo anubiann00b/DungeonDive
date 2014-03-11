@@ -33,8 +33,8 @@ public class PlayScreen implements Screen {
     
     private Stack<Message> messages;
     
-    public int getPlayerX() { return px; }
-    public int getPlayerY() { return py; }
+    public int getPX() { return px; }
+    public int getPY() { return py; }
     
     public World getWorld() { return world; }
     

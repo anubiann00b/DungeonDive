@@ -1,6 +1,7 @@
 package game.enemy;
 
 import game.screens.PlayScreen;
+import game.util.FieldOfView;
 import game.world.World;
 import java.awt.Color;
 
@@ -15,6 +16,7 @@ public class Enemy {
     protected Color color;
     protected World world;
     protected PlayScreen screen;
+    protected FieldOfView fov;
     
     public int getX() { return x; }
     public int getY() { return y; }
@@ -34,6 +36,7 @@ public class Enemy {
         this.color = color;
         this.screen = screen;
         this.world = screen.getWorld();
+        fov = new FieldOfView(world);
     }
     
     public void update() {
