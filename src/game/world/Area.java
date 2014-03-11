@@ -4,7 +4,7 @@ public class Area {
     
     public static final byte TYPE_DUNGEON = 0;
     public static final byte TYPE_CAVE = 1;
-    public static final byte TYPE_THRONE = 2;
+    public static final byte TYPE_TREASURE = 2;
     
     private Tile[][] map;
     private int mapWidth;
@@ -31,7 +31,7 @@ public class Area {
             case TYPE_DUNGEON:
                 generateDungeon();
                 break;
-            case TYPE_THRONE:
+            case TYPE_TREASURE:
                 generateThroneRoom();
                 break;
             default:

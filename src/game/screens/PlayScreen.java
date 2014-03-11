@@ -3,8 +3,8 @@ package game.screens;
 import asciiPanel.AsciiPanel;
 import game.util.MathHelper;
 import game.util.Message;
-import game.world.Area;
 import game.world.Tile;
+import game.world.World;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.Stack;
@@ -20,7 +20,9 @@ public class PlayScreen implements Screen {
     public static final int MESSAGE_WINDOW_POS = 17;
     public static final int MESSAGE_WINDOW_SIZE = 7;
     
-    private Area area;
+    public static int level = 0;
+    
+    private World world;
     
     private int x;
     private int y;
@@ -33,11 +35,12 @@ public class PlayScreen implements Screen {
     }
     
     private void init() {
-        area = new Area(MAP_WIDTH,MAP_HEIGHT,Area.TYPE_CAVE);
+        level++;
+        world = new World(MAP_WIDTH,MAP_HEIGHT,level);
         do {
             x = (int)(Math.random()*MAP_WIDTH);
             y = (int)(Math.random()*MAP_HEIGHT);
-        } while (!area.getTile(x,y).isPassable);
+        } while (!world.getTile(x,y).isPassable);
     }
     
     public void displayOutput(AsciiPanel terminal) {
@@ -60,14 +63,14 @@ public class PlayScreen implements Screen {
                 int camX = MathHelper.median(0,x-MAP_WINDOW_X/2,MAP_WIDTH-MAP_WINDOW_X);
                 int camY = MathHelper.median(0,y-MAP_WINDOW_Y/2,MAP_HEIGHT-MAP_WINDOW_Y);
                 terminal.write('@',x-camX+MAP_OFFSET_X,y-camY+MAP_OFFSET_Y,Color.WHITE);
-                Tile tile = area.getTile(i+camX,j+camY);
+                Tile tile = world.getTile(i+camX,j+camY);
                 terminal.write(tile.glyph,i+MAP_OFFSET_X,j+MAP_OFFSET_Y,tile.color);
             }
         }
     }
     
     private void moveBy(int dx, int dy) {
-        if (area.getTile(x+dx,y+dy).isPassable) {
+        if (world.getTile(x+dx,y+dy).isPassable) {
             x += dx;
             y += dy;
             return;
@@ -98,6 +101,7 @@ public class PlayScreen implements Screen {
     }
     
     public Screen respondToUserInput(KeyEvent key) {
+        boolean updated = true;
         int k = key.getKeyCode();
         
         if (k == KeyEvent.VK_RIGHT || k == KeyEvent.VK_L || k == KeyEvent.VK_NUMPAD6)
@@ -116,6 +120,8 @@ public class PlayScreen implements Screen {
             moveBy(-1,1);
         else if (k == KeyEvent.VK_N || k == KeyEvent.VK_NUMPAD3)
             moveBy(1,1);
+        else
+            updated = false;
         
         return this;
     }
