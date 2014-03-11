@@ -30,11 +30,18 @@ public class PlayScreen implements Screen {
     
     private int px;
     private int py;
+    private int totalHp;
+    private int currentHp;
+    private int pAC;
     
     private Stack<Message> messages;
     
-    public int getPX() { return px; }
-    public int getPY() { return py; }
+    public int getPlayerX() { return px; }
+    public int getPlayerY() { return py; }
+    
+    public int getPlayerAC() { return pAC; }
+    
+    public void damage(int amount) { if(currentHp<amount) currentHp -= amount; else currentHp = 0; }
     
     public World getWorld() { return world; }
     
@@ -43,6 +50,9 @@ public class PlayScreen implements Screen {
     }
     
     public PlayScreen() {
+        pAC = 10;
+        totalHp = 50;
+        currentHp = totalHp;
         level++;
         world = new World(MAP_WIDTH,MAP_HEIGHT,level,this);
         do {

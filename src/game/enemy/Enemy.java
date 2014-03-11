@@ -18,6 +18,9 @@ public class Enemy {
     protected PlayScreen screen;
     protected FieldOfView fov;
     
+    protected int diceSides;
+    protected int bonus;
+    
     public int getX() { return x; }
     public int getY() { return y; }
     public int getMaxHp() { return maxHp; }

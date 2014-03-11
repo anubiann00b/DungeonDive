@@ -2,6 +2,7 @@ package game.enemy;
 
 import asciiPanel.AsciiPanel;
 import game.screens.PlayScreen;
+import game.util.Dice;
 import game.util.Message;
 import java.awt.Color;
 
@@ -9,6 +10,8 @@ public class EnemyOrcFighter extends Enemy {
 
     public EnemyOrcFighter(int x, int y, PlayScreen screen) {
         super(x,y,15,'o',"Orc Fighter",AsciiPanel.red,screen);
+        diceSides = 6;
+        bonus = 3;
     }
     
     @Override
@@ -16,8 +19,8 @@ public class EnemyOrcFighter extends Enemy {
         
         fov.update(x,y,9);
         
-        int px = screen.getPX();
-        int py = screen.getPY();
+        int px = screen.getPlayerX();
+        int py = screen.getPlayerY();
         
         if (!fov.isVisible(px,py))
             return;
@@ -45,7 +48,7 @@ public class EnemyOrcFighter extends Enemy {
     }
     
     private void moveBy(int dx, int dy) {
-        if (x+dx==screen.getPX() && y+dy==screen.getPY()) {
+        if (x+dx==screen.getPlayerX() && y+dy==screen.getPlayerY()) {
             attack();
             return;
         }
@@ -55,7 +58,23 @@ public class EnemyOrcFighter extends Enemy {
     }
     
     public void attack() {
-        String message = getName() + " hits you.";
+        int d20 = Dice.roll(20);
+        int damage = 0;
+        String message = null;
+        
+        if (d20 == 20) {
+            damage = bonus+diceSides;
+            message = getName() + " crits you.";
+        } else if (d20 == 1) {
+            damage = 0;
+            message = getName() + " wildly misses you.";
+        } else if (d20 > screen.getPlayerAC()) {
+            message = getName() + " hits you.";
+            damage += bonus + Dice.roll(diceSides);
+        } else {
+            message = getName() + " misses you.";
+        }
+        
         screen.addMessage(new Message(message,Color.RED));
     }
 }
