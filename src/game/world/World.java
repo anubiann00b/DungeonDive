@@ -42,9 +42,15 @@ public class World {
     }
     
     public void update() {
+        ArrayList<Enemy> remove = new ArrayList<Enemy>();
         for (Enemy e : enemies) {
-            e.update();
+            if (e.getCurrentHp() <= 0)
+                remove.add(e);
+            else
+                e.update();
         }
+        
+        enemies.removeAll(remove);
     }
 
     public void addEnemy() {
@@ -54,5 +60,12 @@ public class World {
             y = (int)(Math.random()*areas.get(level).getWidth());
         } while (!getTile(x,y).isPassable);
         enemies.add(new EnemyOrcFighter(x,y,screen));
+    }
+
+    public Enemy getEnemy(int x, int y) {
+        for (Enemy e : enemies)
+            if (e.getX() == x && e.getY() == y)
+                return e;
+        return null;
     }
 }

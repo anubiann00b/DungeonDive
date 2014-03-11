@@ -52,7 +52,7 @@ public class PlayScreen implements Screen {
         messages = new Stack<Message>();
         fov = new FieldOfView(world);
         
-        for (int i=0;i<5000;i++) {
+        for (int i=0;i<500;i++) {
             world.addEnemy();
         }
     }
@@ -98,11 +98,19 @@ public class PlayScreen implements Screen {
     }
     
     private void moveBy(int dx, int dy) {
+        Enemy e = world.getEnemy(px+dx,py+dy);
+        
+        if (e != null) {
+            attack(e);
+            return;
+        }
+        
         if (world.getTile(px+dx,py+dy).isPassable) {
             px += dx;
             py += dy;
             return;
         }
+        
         String message;
         switch ((int)(Math.random()*5)) {
             case 0:
@@ -122,6 +130,11 @@ public class PlayScreen implements Screen {
                 break;
         }
         addMessage(new Message(message,Color.ORANGE));
+    }
+    
+    public void attack(Enemy e) {
+        String message = "You hit the " + e.getName() + ".";
+        addMessage(new Message(message,Color.RED));
     }
     
     public Screen respondToUserInput(KeyEvent key) {
@@ -144,6 +157,8 @@ public class PlayScreen implements Screen {
             moveBy(-1,1);
         else if (k == KeyEvent.VK_N || k == KeyEvent.VK_NUMPAD3)
             moveBy(1,1);
+        else if (k == KeyEvent.VK_PERIOD || k == KeyEvent.VK_S) {}
+            
         else
             updated = false;
         
