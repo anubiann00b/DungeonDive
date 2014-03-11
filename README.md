@@ -3,6 +3,7 @@ DungeonDive
 
 A coffee break roguelike for this year's (2014) 7DRL.
 
+Officially started at 10pm on the 9th of March.
 
 \*clears throat\*
 
