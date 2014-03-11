@@ -10,8 +10,9 @@ public class EnemyOrcFighter extends Enemy {
 
     public EnemyOrcFighter(int x, int y, PlayScreen screen) {
         super(x,y,15,'o',"Orc Fighter",AsciiPanel.red,screen);
-        diceSides = 6;
-        bonus = 3;
+        damageDie = 6;
+        damageBonus = 3;
+        attackBonus = 2;
     }
     
     @Override
@@ -58,23 +59,24 @@ public class EnemyOrcFighter extends Enemy {
     }
     
     public void attack() {
-        int d20 = Dice.roll(20);
+        int attackRoll = Dice.roll(20) + attackBonus;
         int damage = 0;
         String message = null;
         
-        if (d20 == 20) {
-            damage = bonus+diceSides;
+        if (attackRoll == 20) {
+            damage = damageBonus+damageDie;
             message = getName() + " crits you.";
-        } else if (d20 == 1) {
+        } else if (attackRoll == 1) {
             damage = 0;
             message = getName() + " wildly misses you.";
-        } else if (d20 > screen.getPlayerAC()) {
+        } else if (attackRoll > screen.getPlayerAC()) {
             message = getName() + " hits you.";
-            damage += bonus + Dice.roll(diceSides);
+            damage += damageBonus + Dice.roll(damageDie);
         } else {
             message = getName() + " misses you.";
         }
         
+        screen.damage(damage);
         screen.addMessage(new Message(message,Color.RED));
     }
 }
