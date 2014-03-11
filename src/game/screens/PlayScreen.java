@@ -134,7 +134,7 @@ public class PlayScreen implements Screen {
     
     public void attack(Enemy e) {
         String message = "You hit the " + e.getName() + ".";
-        addMessage(new Message(message,Color.RED));
+        addMessage(new Message(message,Color.YELLOW));
     }
     
     public Screen respondToUserInput(KeyEvent key) {
