@@ -1,6 +1,7 @@
 package game.screens;
 
 import asciiPanel.AsciiPanel;
+import game.util.FieldOfView;
 import game.util.MathHelper;
 import game.util.Message;
 import game.world.Tile;
@@ -24,23 +25,22 @@ public class PlayScreen implements Screen {
     
     private World world;
     
+    private FieldOfView fov;
+    
     private int x;
     private int y;
     
     private Stack<Message> messages;
     
     public PlayScreen() {
-        init();
-        messages = new Stack<Message>();
-    }
-    
-    private void init() {
         level++;
         world = new World(MAP_WIDTH,MAP_HEIGHT,level);
         do {
             x = (int)(Math.random()*MAP_WIDTH);
             y = (int)(Math.random()*MAP_HEIGHT);
         } while (!world.getTile(x,y).isPassable);
+        messages = new Stack<Message>();
+        fov = new FieldOfView(world);
     }
     
     public void displayOutput(AsciiPanel terminal) {
@@ -58,13 +58,22 @@ public class PlayScreen implements Screen {
     }
     
     private void drawMap(AsciiPanel terminal) {
+        fov.update(x,y,9);
         for(int i=0;i<MAP_WINDOW_X;i++) {
             for (int j=0;j<MAP_WINDOW_Y;j++) {
                 int camX = MathHelper.median(0,x-MAP_WINDOW_X/2,MAP_WIDTH-MAP_WINDOW_X);
                 int camY = MathHelper.median(0,y-MAP_WINDOW_Y/2,MAP_HEIGHT-MAP_WINDOW_Y);
+                
                 terminal.write('@',x-camX+MAP_OFFSET_X,y-camY+MAP_OFFSET_Y,Color.WHITE);
+                
                 Tile tile = world.getTile(i+camX,j+camY);
-                terminal.write(tile.glyph,i+MAP_OFFSET_X,j+MAP_OFFSET_Y,tile.color);
+                
+                if (fov.isVisible(i+camX,j+camY))
+                    terminal.write(tile.glyph,i+MAP_OFFSET_X,j+MAP_OFFSET_Y,tile.color);
+                else {
+                    tile = fov.tile(i+camX,j+camY);
+                    terminal.write(tile.glyph,i+MAP_OFFSET_X,j+MAP_OFFSET_Y,Color.DARK_GRAY);
+                }
             }
         }
     }
