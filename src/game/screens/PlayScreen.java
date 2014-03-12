@@ -107,7 +107,7 @@ public class PlayScreen implements Screen {
         messages = new LinkedList<Message>();
         fov = new FieldOfView(world);
         
-        for (int i=0;i<50;i++) {
+        for (int i=0;i<100;i++) {
             world.addEnemy();
         }
     }
