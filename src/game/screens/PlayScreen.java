@@ -41,7 +41,7 @@ public class PlayScreen implements Screen {
     
     public int getPlayerAC() { return pAC; }
     
-    public void damage(int amount) { if(currentHp<amount) currentHp -= amount; else currentHp = 0; }
+    public void damage(int amount) { if(currentHp>amount) currentHp -= amount; else currentHp = 0; }
     
     public World getWorld() { return world; }
     
@@ -49,9 +49,9 @@ public class PlayScreen implements Screen {
         messages.push(message);
     }
     
-    public PlayScreen() {
+    public PlayScreen(int hp) {
         pAC = 10;
-        totalHp = 50;
+        totalHp = hp;
         currentHp = totalHp;
         level++;
         world = new World(MAP_WIDTH,MAP_HEIGHT,level,this);
@@ -74,7 +74,21 @@ public class PlayScreen implements Screen {
     }
     
     private void drawInfo(AsciiPanel terminal) {
-        terminal.write("Dungeon Dive",MAP_OFFSET_X+MAP_WINDOW_X,MAP_OFFSET_Y);
+        writeInfo("Dungeon Dive",0,0,terminal);
+        writeInfo("HP: " + currentHp + "/" + totalHp,0,2,terminal);
+        int bars = 28*currentHp/totalHp;
+        for (int i=0;i<bars;i++)
+            writeInfo("=",10+i,2,Color.GREEN,terminal);
+        for (int i=0;i<28-bars;i++)
+            writeInfo("-",10+bars+i,2,terminal);
+    }
+    
+    private void writeInfo(String text, int x, int y, AsciiPanel terminal) {
+        writeInfo(text,x,y,AsciiPanel.white,terminal);
+    }
+    
+    private void writeInfo(String text, int x, int y, Color color, AsciiPanel terminal) {
+        terminal.write(text,x+MAP_OFFSET_X+MAP_WINDOW_X,y+MAP_OFFSET_Y,color);
     }
     
     private void drawMessages(AsciiPanel terminal) {

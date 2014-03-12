@@ -13,7 +13,7 @@ public class StartScreen implements Screen {
         int k = key.getKeyCode();
         
         if (k == KeyEvent.VK_ENTER)
-            return new PlayScreen();
+            return new PlayScreen(20);
         
         return this;
     }
