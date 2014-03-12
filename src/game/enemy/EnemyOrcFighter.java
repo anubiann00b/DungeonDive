@@ -13,6 +13,7 @@ public class EnemyOrcFighter extends Enemy {
         damageDie = 6;
         damageBonus = 3;
         attackBonus = 2;
+        ac = 10;
     }
     
     @Override
@@ -70,9 +71,10 @@ public class EnemyOrcFighter extends Enemy {
             damage = 0;
             message = getName() + " wildly misses you.";
         } else if (attackRoll > screen.getPlayerAC()) {
-            message = getName() + " hits you.";
             damage += damageBonus + Dice.roll(damageDie);
+            message = getName() + " hits you.";
         } else {
+            damage = 0;
             message = getName() + " misses you.";
         }
         

@@ -2,6 +2,7 @@ package game.screens;
 
 import asciiPanel.AsciiPanel;
 import game.enemy.Enemy;
+import game.util.Dice;
 import game.util.FieldOfView;
 import game.util.MathHelper;
 import game.util.Message;
@@ -9,7 +10,8 @@ import game.world.Tile;
 import game.world.World;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
-import java.util.Stack;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class PlayScreen implements Screen {
     
@@ -34,7 +36,11 @@ public class PlayScreen implements Screen {
     private int currentHp;
     private int pAC;
     
-    private Stack<Message> messages;
+    private int damageDie;
+    private int damageBonus;
+    private int attackBonus;
+    
+    private Queue<Message> messages;
     
     public int getPlayerX() { return px; }
     public int getPlayerY() { return py; }
@@ -46,12 +52,16 @@ public class PlayScreen implements Screen {
     public World getWorld() { return world; }
     
     public void addMessage(Message message) {
-        messages.push(message);
+        messages.offer(message);
     }
     
     public PlayScreen(int hp) {
         pAC = 10;
+        damageDie = 6;
+        damageBonus = 2;
+        attackBonus = 3;
         totalHp = hp;
+        
         currentHp = totalHp;
         level++;
         world = new World(MAP_WIDTH,MAP_HEIGHT,level,this);
@@ -59,7 +69,7 @@ public class PlayScreen implements Screen {
             px = (int)(Math.random()*MAP_WIDTH);
             py = (int)(Math.random()*MAP_HEIGHT);
         } while (!world.getTile(px,py).isPassable);
-        messages = new Stack<Message>();
+        messages = new LinkedList<Message>();
         fov = new FieldOfView(world);
         
         for (int i=0;i<50;i++) {
@@ -93,9 +103,9 @@ public class PlayScreen implements Screen {
     
     private void drawMessages(AsciiPanel terminal) {
         for (int i=0;i<MESSAGE_WINDOW_SIZE;i++) {
-            if(messages.empty())
+            if(messages.isEmpty())
                 return;
-            Message message = messages.pop();
+            Message message = messages.poll();
             terminal.write(message.message,1,MESSAGE_WINDOW_POS+i,message.color);
         }
     }
@@ -162,8 +172,34 @@ public class PlayScreen implements Screen {
     }
     
     public void attack(Enemy e) {
-        String message = "You hit the " + e.getName() + ".";
-        addMessage(new Message(message,Color.YELLOW));
+        int attackRoll = Dice.roll(20) + attackBonus;
+        int damage = 0;
+        
+        String message = null;
+        Color color = null;
+        
+        if (attackRoll == 20) {
+            damage = damageBonus+damageDie;
+            message = "You crit the " + e.getName() + ".";
+            color = AsciiPanel.brightRed;
+        } else if (attackRoll == 1) {
+            damage = 0;
+            message = "You wildly miss the " + e.getName() + ".";
+            color = AsciiPanel.white;
+        } else if (attackRoll > e.getAC()) {
+            damage += damageBonus + Dice.roll(damageDie);
+            message = "You hit the " + e.getName() + ".";
+            color = Color.YELLOW;
+        } else {
+            damage = 0;
+            message = "You miss the " + e.getName() + ".";
+            color = AsciiPanel.white;
+        }
+        
+        e.damage(damage);
+        addMessage(new Message(message,color));
+        if (e.getCurrentHp()<=0)
+            addMessage(new Message("You kill the " + e.getName(),AsciiPanel.brightGreen));
     }
     
     public Screen respondToUserInput(KeyEvent key) {

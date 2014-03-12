@@ -21,6 +21,7 @@ public class Enemy {
     protected int damageDie;
     protected int damageBonus;
     protected int attackBonus;
+    protected int ac;
     
     public int getX() { return x; }
     public int getY() { return y; }
@@ -29,6 +30,10 @@ public class Enemy {
     public char getGlyph() { return glyph; }
     public String getName() { return name; }
     public Color getColor() { return color; }
+    
+    public int getAC() { return ac; }
+    
+    public void damage(int amount) { if(currentHp>amount) currentHp -= amount; else currentHp = 0; }
     
     public Enemy(int x, int y, int hp, char glyph, String name, Color color, PlayScreen screen) {
         this.x = x;
