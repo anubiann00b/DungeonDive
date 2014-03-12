@@ -11,7 +11,7 @@ public class EnemyOrcFighter extends Enemy {
     public EnemyOrcFighter(int x, int y, PlayScreen screen) {
         super(x,y,15,'o',"Orc Fighter",AsciiPanel.red,screen);
         damageDie = 6;
-        damageBonus = 3;
+        damageBonus = 1;
         attackBonus = 2;
         ac = 10;
     }

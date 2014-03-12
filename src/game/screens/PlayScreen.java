@@ -32,13 +32,26 @@ public class PlayScreen implements Screen {
     
     private int px;
     private int py;
-    private int totalHp;
-    private int currentHp;
     private int pAC;
     
     private int damageDie;
     private int damageBonus;
     private int attackBonus;
+    
+    private int totalHP;
+    private int currentHP;
+    
+    private int totalStepHP = 10;
+    private int currentStepHP = 0;
+    
+    private int quaffFC = 8;
+    private int totalFC = 16;
+    private int currentFC = totalFC;
+    
+    private int totalStepFC = 8;
+    private int currentStepFC = 0;
+    
+    private int time = 0;
     
     private Queue<Message> messages;
     
@@ -47,7 +60,29 @@ public class PlayScreen implements Screen {
     
     public int getPlayerAC() { return pAC; }
     
-    public void damage(int amount) { if(currentHp>amount) currentHp -= amount; else currentHp = 0; }
+    public void damage(int amount) {
+        if(currentHP>amount)
+            currentHP -= amount;
+        else
+            currentHP = 0;
+        currentStepHP = 0;
+    }
+    
+    public void heal(int amount) {
+        if(currentHP+amount<totalHP)
+            currentHP += amount;
+        else
+            currentHP = totalHP;
+        currentStepHP = 0;
+    }
+    
+    public void regenFlask(int amount) {
+        if(currentFC+amount<totalFC)
+            currentFC += amount;
+        else
+            currentFC = totalFC;
+        currentStepFC = 0;
+    }
     
     public World getWorld() { return world; }
     
@@ -56,13 +91,13 @@ public class PlayScreen implements Screen {
     }
     
     public PlayScreen(int hp) {
-        pAC = 10;
+        pAC = 14;
         damageDie = 6;
         damageBonus = 2;
         attackBonus = 3;
-        totalHp = hp;
+        totalHP = hp;
         
-        currentHp = totalHp;
+        currentHP = totalHP;
         level++;
         world = new World(MAP_WIDTH,MAP_HEIGHT,level,this);
         do {
@@ -85,12 +120,19 @@ public class PlayScreen implements Screen {
     
     private void drawInfo(AsciiPanel terminal) {
         writeInfo("Dungeon Dive",0,0,terminal);
-        writeInfo("HP: " + currentHp + "/" + totalHp,0,2,terminal);
-        int bars = 28*currentHp/totalHp;
-        for (int i=0;i<bars;i++)
+        writeInfo("HP: " + currentHP + "/" + totalHP,0,2,terminal);
+        int hBars = 28*currentHP/totalHP;
+        for (int i=0;i<hBars;i++)
             writeInfo("=",10+i,2,Color.GREEN,terminal);
-        for (int i=0;i<28-bars;i++)
-            writeInfo("-",10+bars+i,2,terminal);
+        for (int i=0;i<28-hBars;i++)
+            writeInfo("-",10+hBars+i,2,terminal);
+        
+        writeInfo("FC: " + currentFC + "/" + totalFC,0,3,terminal);
+        int fBars = 28*currentFC/totalFC;
+        for (int i=0;i<fBars;i++)
+            writeInfo("=",10+i,3,Color.BLUE,terminal);
+        for (int i=0;i<28-fBars;i++)
+            writeInfo("-",10+fBars+i,3,terminal);
     }
     
     private void writeInfo(String text, int x, int y, AsciiPanel terminal) {
@@ -198,8 +240,10 @@ public class PlayScreen implements Screen {
         
         e.damage(damage);
         addMessage(new Message(message,color));
-        if (e.getCurrentHp()<=0)
+        if (e.getCurrentHp()<=0) {
             addMessage(new Message("You kill the " + e.getName(),AsciiPanel.brightGreen));
+            regenFlask(1);
+        }
     }
     
     public Screen respondToUserInput(KeyEvent key) {
@@ -226,12 +270,41 @@ public class PlayScreen implements Screen {
             addMessage(new Message("You wait.",AsciiPanel.white));
         else if (k == KeyEvent.VK_SLASH && key.isShiftDown())
             return new HelpScreen(this);
-        else
+        else if (k == KeyEvent.VK_Q) {
+            quaff();
+        } else
             updated = false;
         
-        if (updated)
-            world.update();
+        if (!updated)
+            return this;
         
+        time++;
+        
+        world.update();
+        
+        if (currentStepHP>=totalStepHP) {
+            heal(1);
+            currentStepHP = 0;
+        } else {
+            currentStepHP++;
+        }
+        
+        if (currentStepFC>=totalStepFC) {
+            regenFlask(1);
+            currentStepFC = 0;
+        } else {
+            currentStepFC++;
+        }
         return this;
+    }
+
+    private void quaff() {
+        if (currentFC < quaffFC) {
+            addMessage(new Message("Your flask is empty!",AsciiPanel.brightRed));
+            return;
+        }
+        currentFC -= quaffFC;
+        heal(20);
+        addMessage(new Message("You take a quaff from your flask.",AsciiPanel.brightGreen));
     }
 }
