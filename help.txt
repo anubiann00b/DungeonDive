@@ -1,0 +1,14 @@
+
+Dungeon Dive
+===============================================================================
+
+Dungeon Dive: A 7DRL made by anubiann00b (Shreyas).
+Contact me at skraman1999@gmail.com
+
+This project is open source! https://github.com/anubiann00b/DungeonDive
+
+Use the arrow keys, numpad, or vi keys to move. Move into an enemy to attack.
+Use ? to access this menu.
+
+Enemies:
+o - Orc.

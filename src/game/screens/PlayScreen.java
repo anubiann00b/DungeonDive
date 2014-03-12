@@ -174,6 +174,8 @@ public class PlayScreen implements Screen {
             moveBy(1,1);
         else if (k == KeyEvent.VK_PERIOD || k == KeyEvent.VK_S)
             addMessage(new Message("You wait.",AsciiPanel.white));
+        else if (k == KeyEvent.VK_SLASH && key.isShiftDown())
+            return new HelpScreen(this);
         else
             updated = false;
         
