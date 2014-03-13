@@ -53,7 +53,9 @@ public class PlayScreen implements Screen {
     private int totalStepFC = 8;
     private int currentStepFC = 0;
     
-    private int time = 0;
+    private int steps = 0;
+    
+    private long startTime;
     
     private Queue<Message> messages;
     
@@ -112,6 +114,8 @@ public class PlayScreen implements Screen {
         for (int i=0;i<MAX_ENEMIES;i++) {
             world.addEnemy();
         }
+        
+        startTime = System.currentTimeMillis();
     }
     
     @Override
@@ -295,15 +299,15 @@ public class PlayScreen implements Screen {
         if (!updated)
             return this;
         
-        time++;
+        steps++;
         
         world.update();
         
         if (currentHP<=0)
-            return new DieScreen();
+            return new DieScreen(steps,fov.getExploredTiles(),MAX_ENEMIES-world.getNumEnemies(),System.currentTimeMillis()-startTime);
         
         if (world.getEnemies().size() <= 0)
-            return new WinScreen(time,fov.getExploredTiles(),MAX_ENEMIES-world.getNumEnemies());
+            return new WinScreen(steps,fov.getExploredTiles(),MAX_ENEMIES-world.getNumEnemies(),System.currentTimeMillis()-startTime);
         
         if (currentStepHP>=totalStepHP) {
             heal(1);
