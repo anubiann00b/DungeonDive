@@ -40,12 +40,10 @@ public class Window extends JFrame implements KeyListener {
     }
     
     @Override
-    public void keyReleased(KeyEvent e) {
-    }
+    public void keyReleased(KeyEvent e) { }
     
     @Override
-    public void keyTyped(KeyEvent e) {
-    }
+    public void keyTyped(KeyEvent e) { }
     
     public static void main(String[] args) {
         Window window = new Window();
