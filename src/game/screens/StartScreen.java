@@ -7,7 +7,12 @@ public class StartScreen implements Screen {
     
     @Override
     public void displayOutput(AsciiPanel terminal) {
-        terminal.writeCenter("Dungeon Dive",2);
+        terminal.writeCenter("You are an adventurer.",2);
+        terminal.writeCenter("The lord of your realm offers a thousand gold coins to",3);
+        terminal.writeCenter("the man who can kill all the orcs and save the land from",4);
+        terminal.writeCenter("the orcish pestilence. You have accepted this quest, and",5);
+        terminal.writeCenter("now you must kill the orcs, or die trying.",6);
+        terminal.writeCenter("--ENTER--",12);
     }
     
     @Override

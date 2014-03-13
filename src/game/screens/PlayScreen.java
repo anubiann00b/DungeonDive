@@ -26,6 +26,8 @@ public class PlayScreen implements Screen {
     
     public static int level = 0;
     
+    public final int MAX_ENEMIES = 100;
+    
     private World world;
     
     private FieldOfView fov;
@@ -107,7 +109,7 @@ public class PlayScreen implements Screen {
         messages = new LinkedList<Message>();
         fov = new FieldOfView(world);
         
-        for (int i=0;i<100;i++) {
+        for (int i=0;i<MAX_ENEMIES;i++) {
             world.addEnemy();
         }
     }
@@ -121,19 +123,32 @@ public class PlayScreen implements Screen {
     
     private void drawInfo(AsciiPanel terminal) {
         writeInfo("Dungeon Dive",0,0,terminal);
+        
         writeInfo("HP: " + currentHP + "/" + totalHP,0,2,terminal);
+        
         int hBars = 28*currentHP/totalHP;
+        
         for (int i=0;i<hBars;i++)
             writeInfo("=",10+i,2,Color.GREEN,terminal);
+        
         for (int i=0;i<28-hBars;i++)
             writeInfo("-",10+hBars+i,2,terminal);
         
         writeInfo("FC: " + currentFC + "/" + totalFC,0,3,terminal);
+        
         int fBars = 28*currentFC/totalFC;
+        
         for (int i=0;i<fBars;i++)
             writeInfo("=",10+i,3,Color.BLUE,terminal);
+        
         for (int i=0;i<28-fBars;i++)
             writeInfo("-",10+fBars+i,3,terminal);
+        
+        int enemies = world.getNumEnemies();
+        writeInfo("Enemies remaining: " + enemies,0,5,terminal);
+        
+        int tiles = fov.getExploredTiles();
+        writeInfo("Tiles explored: " + tiles,0,6,terminal);
     }
     
     private void writeInfo(String text, int x, int y, AsciiPanel terminal) {
@@ -283,6 +298,12 @@ public class PlayScreen implements Screen {
         time++;
         
         world.update();
+        
+        if (currentHP<=0)
+            return new DieScreen();
+        
+        if (world.getEnemies().size() <= 0)
+            return new WinScreen(time,fov.getExploredTiles(),MAX_ENEMIES-world.getNumEnemies());
         
         if (currentStepHP>=totalStepHP) {
             heal(1);

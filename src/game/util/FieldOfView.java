@@ -55,4 +55,15 @@ public class FieldOfView {
             }
         }
     }
+    
+    public int getExploredTiles() {
+        int tileCount = 0;
+        for (int i=0;i<world.getWidth();i++) {
+            for (int j=0;j<world.getHeight();j++) {
+                if (tiles[i][j] != Tile.BLANK)
+                    tileCount++;
+            }
+        }
+        return tileCount;
+    }
 }

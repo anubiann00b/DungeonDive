@@ -68,4 +68,8 @@ public class World {
                 return e;
         return null;
     }
+
+    public int getNumEnemies() {
+        return enemies.size();
+    }
 }
