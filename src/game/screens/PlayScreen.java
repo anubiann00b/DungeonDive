@@ -112,6 +112,7 @@ public class PlayScreen implements Screen {
         }
     }
     
+    @Override
     public void displayOutput(AsciiPanel terminal) {
         drawMap(terminal);
         drawMessages(terminal);
@@ -246,6 +247,7 @@ public class PlayScreen implements Screen {
         }
     }
     
+    @Override
     public Screen respondToUserInput(KeyEvent key) {
         boolean updated = true;
         int k = key.getKeyCode();
