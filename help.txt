@@ -10,5 +10,24 @@ This project is open source! https://github.com/anubiann00b/DungeonDive
 Use the arrow keys, numpad, or vi keys to move. Move into an enemy to attack.
 Use the movement keys to scroll this menu.
 
+This game is really bad because I had a tabletop party, a camping trip, a
+calculus test, and an english project all in this week. Well, I
+did only spend the one week on it.
+
 Enemies:
 o - Orc.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+~le Easter Egg.
