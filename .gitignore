@@ -9,3 +9,4 @@ src/Mergesort.java
 # Folders
 build/
 nbproject/
+dist/
