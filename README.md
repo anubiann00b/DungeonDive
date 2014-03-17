@@ -3,6 +3,19 @@ DungeonDive
 
 A coffee break roguelike for this year's (2014) 7DRL.
 
+![Killing an enemy](screenshots/scr1.png)
+
+Walk into enemies to hit them; try not to die.
+
+===========
+
+
+![Drinking from flask](screenshots/scr2.png)
+
+Use q to drink from flask, healing at the cost of flask charges.
+
+===========
+
 Officially started at 10pm on the 9th of March.
 
 \*clears throat\*
