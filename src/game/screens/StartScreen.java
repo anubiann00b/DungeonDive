@@ -12,7 +12,8 @@ public class StartScreen implements Screen {
         terminal.writeCenter("the man who can kill all the orcs and save the land from",4);
         terminal.writeCenter("the orcish pestilence. You have accepted this quest, and",5);
         terminal.writeCenter("now you must kill the orcs, or die trying.",6);
-        terminal.writeCenter("--ENTER--",12);
+        terminal.writeCenter("Hint: Use '?' to open help (in game).",8);
+        terminal.writeCenter("--ENTER--",14);
     }
     
     @Override

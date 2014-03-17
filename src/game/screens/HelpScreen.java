@@ -9,7 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 
-class HelpScreen implements Screen {
+public class HelpScreen implements Screen {
     
     private PlayScreen game;
     
